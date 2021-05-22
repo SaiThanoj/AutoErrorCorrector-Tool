@@ -47,6 +47,22 @@ h2{
     position:relative;
     border:1px solid #000;
 }
+.Msgcard{
+    background-color: #dd8874;
+    color:#fff;
+    margin:20px 0px;
+    position:relative;
+    padding: 5px;
+    border:1px solid #000;
+}
+.Msgcard:hover {
+      background-color: grey;
+    color:#fff;
+    margin:20px 0px;
+    position:relative;
+    padding: 5px;
+    border:1px solid #000;
+}
 .content-220499{
     position: absolute;
     top:0;right:0;

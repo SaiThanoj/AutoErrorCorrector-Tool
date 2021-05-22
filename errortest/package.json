@@ -11,7 +11,7 @@
 	],
 	"activationEvents": [
 		"onCommand:errortest.helloWorld",
-		"onCommand:extension.soView"
+		"onCommand:extension.StackOverflow View"
 	],
 	"main": "./extension.js",
 	"contributes": {
@@ -21,8 +21,8 @@
 				"title": "Hello World"
 			},
 			{
-				"command": "extension.soView",
-				"title": "soView"
+				"command": "extension.StackOverflow View",
+				"title": "StackOverflow View"
 			}
 		]
 	},

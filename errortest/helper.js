@@ -1,6 +1,12 @@
-let searchbar = document.getElementById('search');
-searchbar.focus();
+// let searchbar = document.getElementById('search');
+// searchbar.focus();
+let searchMsg;
 
+function errorclick(i) {
+    searchMsg = i;
+    console.log("iam inside the helper js file");
+    searchAnswers(searchMsg);
+}
 
 const copyToClipboard = str => {
     const el = document.createElement('textarea');
@@ -57,16 +63,10 @@ function createQuestionsCard(questions) {
     return cards;
 }
 
-async function searchAnswers() {
-    if (!searchbar.value) {
-        if (searchbar.placeholder !== 'Search for your error..') {
-            searchbar.value = searchbar.placeholder;
-        } else {
-            searchbar.value = '';
-        }
-    }
-    document.getElementById("answers").innerHTML = '';
-    let searchQuery = document.querySelector('input#search').value;
+async function searchAnswers(msg) {
+
+    document.querySelector("#answers").innerHTML = '';
+    let searchQuery = msg;
     searchQuery = searchQuery.trim().replace(/ /g, '+');
     let data = await fetch('https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&q=' + searchQuery + '&answers=1&site=stackoverflow&filter=withbody')
     let questions = (await data.json()).items;
@@ -76,20 +76,20 @@ async function searchAnswers() {
         .then(response => response.json())
         .then(data => {
             console.log(data.items);
-            document.getElementById("answers").innerHTML += createAnswerCard(data.items, questions[0]);
+            document.querySelector("#answers").innerHTML += createAnswerCard(data.items, questions[0]);
         })
         .then(() => {
-            document.getElementById("answers").innerHTML += createQuestionsCard(questions);
+            document.querySelector("#answers").innerHTML += createQuestionsCard(questions);
         })
         .then(renderCopyButtons);
 
 }
 
 
-window.addEventListener('keyup', (e) => {
-    if (e.keyCode === 13) {
-        searchAnswers();
-    }
-}, false);
+// window.addEventListener('keyup', (e) => {
+//     if (e.keyCode === 13) {
+//         searchAnswers();
+//     }
+// }, false);
 
-document.querySelector('.search-button').addEventListener('click', searchAnswers);
+// document.querySelector('.search-button').addEventListener('click', searchAnswers);

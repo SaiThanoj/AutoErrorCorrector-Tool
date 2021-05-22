@@ -1,7 +1,8 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
-const webview_1 = require("./webview");
+let globalMsg;
+// const webview_1 = require("./webview");
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -20,12 +21,7 @@ function activate(context) {
 	// The commandId parameter must match the command field in package.json
 	let disposable = vscode.commands.registerCommand('errortest.helloWorld', function () {
 		// The code you place here will be executed every time your command is executed
-		// var f;
 		{
-			// const currentFileUri = (f = vscode.window.activeTextEditor) === null || f === void 0 ? void 0 : f.document.uri;
-			// if (!currentFileUri) {
-			// 	return;
-			// }
 			var out = vscode.languages.getDiagnostics();
 		}
 		// Display a message box to the user
@@ -43,6 +39,7 @@ function activate(context) {
 				errorMessages.push(error);
 			});
 		});
+
 		// show the selection window
 		vscode.window.showQuickPick(errorMessages)
 			// process the response
@@ -54,18 +51,81 @@ function activate(context) {
 	});
 	context.subscriptions.push(disposable);
 
-	let stackOverdlowView = vscode.commands.registerCommand('extension.soView', () => {
-		// Gotta play with this API :)
-		// https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&q=get+date+in+javascript&answers=1&site=stackoverflow
+// ----------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	let stackOverdlowView = vscode.commands.registerCommand('extension.StackOverflow View', () => {
+		globalMsg = '';
 		// Create and show panel
 		const panel = vscode.window.createWebviewPanel('stackOverflow', 'StackOverflow View', vscode.ViewColumn.Two, {
 			enableScripts: true
 		});
+
+		{
+			var out = vscode.languages.getDiagnostics();
+		}
+
+		console.log(out);
+
+		// formation of the error selection list
+		let errorMessages = [];
+		let displayContent = '';
+		out.forEach((value) => {
+			value[1].forEach((value) => {
+				let error = value.message;
+				if (value.source !== undefined) {
+					error += ' in ' + value.source;
+				}
+				error = error.replace(/[']/g, "");
+				error = error.replace("Undefined variable:", "");
+				error = " \"" + error + "\" ";
+				errorMessages.push(error);
+				console.log(error);
+			});
+		});
+
+		errorMessages.forEach((value) => {
+			displayContent += " <div id='search' class='Msgcard' onclick=' errorclick( " + value + " ) ' ><p> " + value + " </p></div> "
+		});
+		globalMsg = displayContent;
+
 		// And set its HTML content
-		panel.webview.html = webview_1.getHtmlContent();
+		panel.webview.html = getHtmlContent();
 	});
 	context.subscriptions.push(stackOverdlowView);
 }
+
+
+
+function getHtmlContent() {
+	return `
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Integrated Stackoverflow Search</title>
+			<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
+			<link rel="stylesheet" href="https://firebasestorage.googleapis.com/v0/b/setool-f6043.appspot.com/o/view.css?alt=media&token=51a6ffb5-00d4-4172-bb12-a95b6a9d3fdb">
+			<style>
+			body{
+				background-color:#ddd !important;
+			}
+			</style>
+		</head>
+		<body>
+			<div style="padding:20px;">
+				<h3 style="color:#111;font-weight:bold;">Errors</h3>
+								${globalMsg}
+
+				<div id="answers" style="margin-top:20px;">
+				</div>
+			</div>
+			<script src="https://firebasestorage.googleapis.com/v0/b/setool-f6043.appspot.com/o/helper.js?alt=media&token=7608f3a2-f889-44a6-9b7f-603a778aea7c"></script>
+		</body>
+	</html>`
+	;
+}
+
 
 // this method is called when your extension is deactivated
 function deactivate() {
