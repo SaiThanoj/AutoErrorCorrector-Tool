@@ -1,5 +1,5 @@
 # AutoErrorCorrector-Tool
-# errortest README
+# Errortest README
 
 This is the README for your extension "StackOverflow View". After writing up a brief description, we recommend including the following sections.
 
