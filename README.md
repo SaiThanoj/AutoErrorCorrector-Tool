@@ -63,5 +63,9 @@ Added features X, Y, and Z.
 * [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
 * [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
 
+### Video Link
+
+* Video Explanation (https://youtu.be/yx7E0MbMzbs)
+
 **Enjoy!**
 
